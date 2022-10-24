@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 
 function Clicker() {
-    const [count, setCount] = useState(0)
-    const [test, setTest] = useState()
+    const [count, setCount] = useState(() => {
+        const savedCount = localStorage.getItem('clickerCount') ?? 0
+        return Number(savedCount)
+    })
 
     useEffect(() => {
         let id
@@ -11,20 +13,14 @@ function Clicker() {
             id = setTimeout(countDown, 1000)
             console.log(id)
         }
-        // clearTimeout(id)
+
+        localStorage.setItem('clickerCount', count)
 
         return () => {
             clearTimeout(id)
             console.log(`cleared ${id}`)
         }
     }, [count])
-
-    // useEffect(() => {
-    //     //effect
-    //     //listener handler auf depency
-    // }, [test])
-
-    // document.addEventListener('click', eventHandler)
 
     function countUp() {
         setCount((currentCount) => currentCount + 1)
